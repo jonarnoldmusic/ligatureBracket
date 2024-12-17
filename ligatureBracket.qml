@@ -1,8 +1,19 @@
+import QtQuick 2.0
 import MuseScore 3.0
 MuseScore {
-    menuPath: "Plugins.ligatureBracket"
+    menuPath: "Plugins.LigatureBracket"
     description: "Format a Note Anchored Line as a horizontal bracket above the staff to identify ligatures."
-    version: "1.0"
+    version: "1.1"
+    
+	//4.4 title: "LigatureBracket"
+    //4.4 categoryCode: "composing-arranging-tools"
+    Component.onCompleted : {
+        if (mscoreMajorVersion >= 4 && mscoreMinorVersion <= 3) {
+           title = qsTr("LigatureBracket") ;
+           // thumbnailName = ".png";
+           categoryCode = "composing-arranging-tools";
+        }
+    }
     
     function makeBracket(line) {
       var hookHeight = 1; //desired height of line hook
@@ -47,6 +58,9 @@ MuseScore {
     } //end makeBracket function
     
     onRun: {
+    
+       curScore.startCmd();
+       
         var elementsList = curScore.selection.elements;
         //Make sure something is selected.
         if (elementsList.length==0) {
@@ -61,6 +75,9 @@ MuseScore {
                   }
             } //end element list loop
         }
-        Qt.quit();
+        
+         curScore.endCmd();
+         
+        (typeof(quit) === 'undefined' ? Qt.quit : quit)()
     } //end onRun
 }
